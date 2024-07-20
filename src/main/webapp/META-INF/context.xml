@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <Resource auth="Container"
+              driverClassName="org.postgresql.Driver"
+              maxActive="50"
+              maxIdle="15"
+              maxWait="5"
+              name="jdbc/postgres"
+              password="root"
+              type="javax.sql.DataSource"
+              url="jdbc:postgresql://localhost:5432/postgres"
+              username="postgres"
+              validationQuery = "SELECT 1"/>
+
+</Context>
