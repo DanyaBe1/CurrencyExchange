@@ -6,14 +6,15 @@
 
     <Resource auth="Container"
               driverClassName="org.postgresql.Driver"
-              maxActive="50"
-              maxIdle="15"
-              maxWait="5"
+              maxTotal="100"
+              maxIdle="30"
+              maxWaitMillis="10000"
               name="jdbc/postgres"
-              password="root"
+              password=""
               type="javax.sql.DataSource"
               url="jdbc:postgresql://localhost:5432/postgres"
               username="postgres"
               validationQuery = "SELECT 1"/>
+
 
 </Context>
