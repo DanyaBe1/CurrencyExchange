@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "991603f9-12fc-443f-87ce-bf0ce9a9d916",
+		"name": "CurrencyExchange Collection",
+		"description": "With this collection you can try all the API endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36635310"
+	},
+	"item": [
+		{
+			"name": "Get All Currencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/mywar/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"mywar",
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Target Currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/currency/IlS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"currency",
+						"IlS"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Exchange Rates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/exchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"exchangeRates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Target Exchange Rate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/exchangeRate/tryils",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"exchangeRate",
+						"tryils"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Currency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/currencies?name=Swiss%20Frank&code=CHF&sign=₣",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"currencies"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Swiss%20Frank"
+						},
+						{
+							"key": "code",
+							"value": "CHF"
+						},
+						{
+							"key": "sign",
+							"value": "₣"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Exchange Rate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/exchangeRates?baseCurrencyCode=ils&targetCurrencyCode=TRY&rate=8.6805",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"exchangeRates"
+					],
+					"query": [
+						{
+							"key": "baseCurrencyCode",
+							"value": "ils"
+						},
+						{
+							"key": "targetCurrencyCode",
+							"value": "TRY"
+						},
+						{
+							"key": "rate",
+							"value": "8.6805"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch Exchange Rate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/USDRUB?rate=0.5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"USDRUB"
+					],
+					"query": [
+						{
+							"key": "rate",
+							"value": "0.5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exchange",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/exchange?from=USD&to=RUB&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "USD"
+						},
+						{
+							"key": "to",
+							"value": "RUB"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
