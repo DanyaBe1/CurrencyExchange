@@ -8,7 +8,6 @@ import com.ed.currencyexchange.models.ExchangeRate;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExchangeRepository {
     private CurrencyRepositories curRep;
@@ -26,7 +25,7 @@ public class ExchangeRepository {
 
     private ExchangeRate newExchangeRateModel(ResultSet rs) throws SQLException {
             if (rs.wasNull()){
-                return ExchangeRate.nullRate();
+                return null;
             }else {
                 Long id = rs.getLong("id");
                 BigDecimal rate = BigDecimal.valueOf(rs.getDouble("rate"));
@@ -34,7 +33,10 @@ public class ExchangeRepository {
                 Currency targetCur = curRep.getCurrency(rs.getLong("target_currency_id"));
                 return new ExchangeRate(id, baseCur, targetCur, rate);
             }
+    }
 
+    private ExchangeRate newExchangeRateManualConfig(Currency baseCur, Currency targetCur, double rate) {
+        return new ExchangeRate(0L, baseCur, targetCur, BigDecimal.valueOf(rate));
     }
     public ExchangeRate getExchangeRate(String code){
         String baseCurrencyCode = code.substring(0, 3);
@@ -50,17 +52,25 @@ public class ExchangeRepository {
             try (ResultSet res = ps.executeQuery()){
                 if (res.next()) {
                     return newExchangeRateModel(res);
-                }else{
-                    return getReverseExchangeRate(targetCurrencyCode, baseCurrencyCode, connection);
                 }
             }catch (SQLException e){
                 e.printStackTrace();
                 return null;
             }
+            ExchangeRate reverse = getReverseExchangeRate(targetCurrencyCode, baseCurrencyCode, connection);
+            if (!(reverse == null)){
+                return reverse;
+            }
+            ExchangeRate cross = getCrossRate(targetCurrencyCode, baseCurrencyCode, connection);
+            if (!(cross == null)){
+                return cross;
+            }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
+
+        return null;
     }
 
     private ExchangeRate getReverseExchangeRate(String baseCurrencyCode, String targetCurrencyCode, Connection connection){
@@ -77,33 +87,29 @@ public class ExchangeRepository {
                 return new ExchangeRate(res.getLong("id"), curRep.getCurrency(res.getLong("target_currency_id")),
                         curRep.getCurrency(res.getLong("base_currency_id")), (BigDecimal.valueOf(1 / res.getDouble("rate"))));
             }else {
-                return ExchangeRate.nullRate();
+                return null;
             }
         }catch (SQLException e){
             e.printStackTrace();
-            return ExchangeRate.nullRate();
+            return null;
         }
     }
 
-    private ExchangeRate getCrossRate(String code){
-        String baseCurrencyCode = code.substring(0, 3);
-        String targetCurrencyCode = code.substring(3, 6);
+    private ExchangeRate getCrossRate(String baseCurrencyCode, String targetCurrencyCode, Connection connection){
         final String query = "SELECT er.rate " +
                 "FROM currencyexchange.exchange_rates er " +
                 "JOIN currencyexchange.currencies base_cur ON er.base_currency_id = base_cur.id " +
                 "JOIN currencyexchange.currencies target_cur ON er.target_currency_id = target_cur.id " +
                 "WHERE base_cur.code = 'USD' AND target_cur.code = ?";
-        try {
-            Connection connection = getConnection();
-            PreparedStatement firstPS = connection.prepareStatement(query);
-            PreparedStatement secondPS = connection.prepareStatement(query);
+        try (PreparedStatement firstPS = connection.prepareStatement(query);
+             PreparedStatement secondPS = connection.prepareStatement(query)){
             firstPS.setString(1, baseCurrencyCode);
             secondPS.setString(1, targetCurrencyCode);
             try (ResultSet firstRes = firstPS.executeQuery();
                  ResultSet secondRes = secondPS.executeQuery()){
                 boolean first = firstRes.next();
                 boolean second = secondRes.next();
-                return (first && second ? new ExchangeRate(0L, curRep.getCurrency(baseCurrencyCode), curRep.getCurrency(targetCurrencyCode), firstRes.getBigDecimal("rate").divide(secondRes.getBigDecimal("rate"))) : null);
+                return (first && second ? newExchangeRateManualConfig(curRep.getCurrency(baseCurrencyCode), curRep.getCurrency(targetCurrencyCode), (firstRes.getDouble("rate") / (secondRes.getDouble(("rate"))))) : null);
             }
             catch (SQLException e){
                 e.printStackTrace();

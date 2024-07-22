@@ -10,10 +10,10 @@
               maxIdle="30"
               maxWaitMillis="10000"
               name="jdbc/postgres"
-              password=""
               type="javax.sql.DataSource"
               url="jdbc:postgresql://localhost:5432/postgres"
               username="postgres"
+              password=""
               validationQuery = "SELECT 1"/>
 
 
