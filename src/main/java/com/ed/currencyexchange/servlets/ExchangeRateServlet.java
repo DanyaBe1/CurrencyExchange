@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
@@ -33,31 +32,31 @@ public class ExchangeRateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
         String currencyCode = requestURI.substring(requestURI.length() - 6, requestURI.length()).toUpperCase();
-        ExchangeRate exchangeRate = er.getExchangeRate(currencyCode);
-        try (PrintWriter writer = resp.getWriter()){
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
-            Gson gson = new Gson();
-            String json = gson.toJson(exchangeRate);
-            writer.println(json);
-            writer.flush();
+        if (!(UTILS.isValidCode(currencyCode.substring(0, 3))) || !(UTILS.isValidCode(currencyCode.substring(3, 6)))){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "{\n" +
+                    "    \"message\": \"Код валюты не соответствует стандарту\"\n" +
+                    "}");
         }
+        ExchangeRate exchangeRate = er.getExchangeRate(currencyCode);
+        Gson gson = new Gson();
+        String json = gson.toJson(exchangeRate);
+        UTILS.responseConstructor(resp, req, json);
     }
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UTILS utils = new UTILS();
         String requestURI = req.getRequestURI();
         String currencyCode = requestURI.substring(requestURI.length() - 6, requestURI.length()).toUpperCase();
-
-        float rate = Float.parseFloat(utils.getRateForPatch(req));
+        if (!(UTILS.isValidCode(currencyCode.substring(0, 3))) || !(UTILS.isValidCode(currencyCode.substring(3, 6)))){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "{\n" +
+                    "    \"message\": \"Код валюты не соответствует стандарту\"\n" +
+                    "}");
+        }
+        float rate = Float.parseFloat(UTILS.getRateForPatch(req));
         if (er.patchExchangeRate(currencyCode, rate)) {
             ExchangeRate exchangeRate = er.getExchangeRate(currencyCode);
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.setContentType("application/json");
             Gson gson = new Gson();
             String json = gson.toJson(exchangeRate);
-            resp.getWriter().println(json);
-            resp.flushBuffer();
+            UTILS.responseConstructor(resp, req, json);
         }
         else{
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

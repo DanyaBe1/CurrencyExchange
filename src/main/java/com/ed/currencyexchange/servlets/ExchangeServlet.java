@@ -1,5 +1,6 @@
 package com.ed.currencyexchange.servlets;
 
+import com.ed.currencyexchange.UTILS.UTILS;
 import com.ed.currencyexchange.dbconnection.PoolConnectionBuilder;
 import com.ed.currencyexchange.models.Exchange;
 import com.ed.currencyexchange.repositories.CurrencyRepositories;
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(value = "/exchange")
 public class ExchangeServlet extends HttpServlet {
@@ -29,13 +29,8 @@ public class ExchangeServlet extends HttpServlet {
         if (exchange == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = resp.getWriter()) {
-            resp.setStatus(HttpServletResponse.SC_OK);
-            Gson gson = new Gson();
-            out.println(gson.toJson(exchange));
-            out.flush();
-        }
+        Gson gson = new Gson();
+        String json = gson.toJson(exchange);
+        UTILS.responseConstructor(resp, req, json);
     }
 }

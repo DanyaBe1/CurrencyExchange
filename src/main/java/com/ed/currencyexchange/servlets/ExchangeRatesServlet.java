@@ -1,5 +1,6 @@
 package com.ed.currencyexchange.servlets;
 
+import com.ed.currencyexchange.UTILS.UTILS;
 import com.ed.currencyexchange.dbconnection.PoolConnectionBuilder;
 import com.ed.currencyexchange.models.ExchangeRate;
 import com.ed.currencyexchange.repositories.CurrencyRepositories;
@@ -25,23 +26,13 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         ExchangeRepository er = new ExchangeRepository(cb, curRep);
         ArrayList<ExchangeRate> exchangeRates = er.getAllExchangeRates();
-        Gson gson = new Gson();
         if (exchangeRates.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        PrintWriter writer = null;
-        try {
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
-            writer = resp.getWriter();
-            String json = gson.toJson(exchangeRates);
-            writer.println(json);
-            resp.setStatus(HttpServletResponse.SC_OK);
-            writer.flush();
-        } finally {
-            writer.close();
-        }
+        Gson gson = new Gson();
+        String json = gson.toJson(exchangeRates);
+        UTILS.responseConstructor(resp, req, json);
     }
 
     @Override
@@ -55,21 +46,11 @@ public class ExchangeRatesServlet extends HttpServlet {
         float rate = Float.parseFloat(req.getParameter("rate"));
         ExchangeRepository er = new ExchangeRepository(cb, curRep);
         if (er.AddExchangeRate(baseCurrencyCode, targetCurrencyCode, rate)){
-            PrintWriter writer = null;
-            try{
-                resp.setCharacterEncoding("UTF-8");
-                resp.setContentType("application/json");
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                writer = resp.getWriter();
-                ExchangeRate exchangeRate = er.getExchangeRate(baseCurrencyCode+targetCurrencyCode);
-                Gson gson = new Gson();
-                String json = gson.toJson(exchangeRate);
-                writer.println(json);
-                writer.flush();
-            }
-            finally {
-                writer.close();
-            }
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            ExchangeRate exchangeRate = er.getExchangeRate(baseCurrencyCode+targetCurrencyCode);
+            Gson gson = new Gson();
+            String json = gson.toJson(exchangeRate);
+            UTILS.responseConstructor(resp, req, json);
         }
         else {
             resp.sendError(HttpServletResponse.SC_CONFLICT);

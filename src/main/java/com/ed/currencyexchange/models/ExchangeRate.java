@@ -12,15 +12,11 @@ public class ExchangeRate {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
-        this.rate = rate;
+        this.rate = rate.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public BigDecimal getRate() {
         return rate;
-    }
-
-    public static ExchangeRate nullRate(){
-        return new ExchangeRate(null, null, null, null);
     }
 
     public String toString(){
