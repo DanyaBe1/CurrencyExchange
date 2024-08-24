@@ -1,0 +1,13 @@
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/models/ExchangeRate.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/UTILS/UTILS.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/filter/CorsFilter.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/servlets/CurrencyServlet.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/models/Exchange.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/servlets/ExchangeServlet.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/models/Currency.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/servlets/ExchangeRatesServlet.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/servlets/ExchangeRateServlet.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/repositories/ExchangeRepository.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/servlets/TargetCurrencyServlet.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/dbconnection/PoolConnectionBuilder.java
+/Users/daniilzhogolev/Documents/Projects/CurrencyExchange/src/main/java/com/ed/currencyexchange/repositories/CurrencyRepositories.java
